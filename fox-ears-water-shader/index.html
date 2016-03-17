@@ -1,0 +1,279 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Fox Ears Water Shader &#8211; Craig Thomas</title>
+<meta name="description" content="How our water shader works for Fox Ears in Unity.">
+<meta name="keywords" content="ggj15, fox, ears, terrain, low poly, shaders">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Fox Ears Water Shader">
+<meta name="twitter:description" content="How our water shader works for Fox Ears in Unity.">
+<meta name="twitter:site" content="@CraigRThomas">
+<meta name="twitter:creator" content="@CraigRThomas">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/images/foxears/water-shader/banner.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fox Ears Water Shader">
+<meta property="og:description" content="How our water shader works for Fox Ears in Unity.">
+<meta property="og:url" content="/fox-ears-water-shader/">
+<meta property="og:site_name" content="Craig Thomas">
+
+
+
+
+
+<link rel="canonical" href="/fox-ears-water-shader/">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Craig Thomas Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<script src="/jquery-1.11.2.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="/">Craig Thomas</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+				    
+				        
+				    
+				    <li><a href="/posts/" >Posts</a></li>
+				
+				    
+				        
+				    
+				    <li><a href="/portfolio/" >Portfolio</a></li>
+				
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+  <div class="image-wrap">
+  <img src=
+    
+      "/images/foxears/water-shader/banner.png"
+    
+  alt="Fox Ears Water Shader feature image">
+  
+  </div><!-- /.image-wrap -->
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+
+	<img src="/images/bio-photo.jpg" class="bio-photo" alt="Craig Thomas bio photo">
+
+
+  <h3 itemprop="name">Craig Thomas</h3>
+  <p>I corral computers to show cool colours using code.</p>
+  <a href="mailto:craig.thomas36@gmail.com" class="author-social" target="_blank"><i class="fa fa-fw fa-envelope-square"></i>Email</a>
+  <a href="http://twitter.com/CraigRThomas" class="author-social" target="_blank"><i class="fa fa-fw fa-twitter-square"></i> Twitter</a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="/fox-ears-water-shader/" rel="bookmark" title="Fox Ears Water Shader">Fox Ears Water Shader</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p>One of the parts of Fox Ears I personally was really happy with after the jam was the water. It definitely needed to be cleaned up, but we had a solid base in place to work with. In this post I outline how the shader that drives our water works.</p>
+
+<h3 id="overview">Overview</h3>
+
+<figure>
+	<a href="../images/foxears/water-shader/flat-water.png"><img src="../images/foxears/water-shader/flat-water.png" /></a>
+</figure>
+
+<p>The image above shows our water as it looks in editor. For the most part, it’s a simple plane (as outlined in <a href="../terrain-generation-in-fox-ears/">this post</a>). All of the magic happens in its shader. Before we get into the shader code, however, we need to generate some additional information for the shader and store it in our water mesh. Let’s take a look at the <strong>LowPolyWater</strong> class, which extends <strong>LowPolyTerrain</strong>:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="na">[System.Serializable]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">LowPolyWater</span> <span class="p">:</span> <span class="n">LowPolyTerrain</span> <span class="p">{</span>
+
+	<span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">GenerateMesh</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">GenerateUniqueID</span><span class="p">();</span>
+		<span class="n">mesh</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Mesh</span><span class="p">();</span>
+		<span class="n">mesh</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="s">&quot;Low Poly Water Plane&quot;</span><span class="p">;</span>
+		<span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">MeshFilter</span><span class="p">&gt;().</span><span class="n">mesh</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">;</span>
+
+		<span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span> <span class="p">=</span> <span class="n">GenerateVertices</span><span class="p">();</span>
+		<span class="n">mesh</span><span class="p">.</span><span class="n">uv</span> <span class="p">=</span> <span class="n">GenerateUVs</span><span class="p">();</span>
+		<span class="n">GenerateUVOffsets</span><span class="p">();</span>
+		<span class="n">mesh</span><span class="p">.</span><span class="n">triangles</span> <span class="p">=</span> <span class="n">GenerateTriangles</span><span class="p">();</span>
+		<span class="n">mesh</span><span class="p">.</span><span class="n">normals</span> <span class="p">=</span> <span class="n">GenerateNormals</span><span class="p">();</span>
+	<span class="p">}</span>
+
+	<span class="k">void</span> <span class="nf">GenerateUVOffsets</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">Vector3</span><span class="p">[]</span> <span class="n">faceInfo</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">[</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
+		<span class="kt">int</span> <span class="n">index</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="p">(</span><span class="n">widthInVerts</span><span class="p">-</span><span class="m">1</span><span class="p">)*(</span><span class="n">lengthInVerts</span><span class="p">-</span><span class="m">1</span><span class="p">);</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+			<span class="n">faceInfo</span><span class="p">[</span><span class="n">index</span><span class="p">++]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+			<span class="n">faceInfo</span><span class="p">[</span><span class="n">index</span><span class="p">++]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+			<span class="n">faceInfo</span><span class="p">[</span><span class="n">index</span><span class="p">++]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+
+			<span class="n">faceInfo</span><span class="p">[</span><span class="n">index</span><span class="p">++]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+			<span class="n">faceInfo</span><span class="p">[</span><span class="n">index</span><span class="p">++]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+			<span class="n">faceInfo</span><span class="p">[</span><span class="n">index</span><span class="p">++]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+		<span class="p">}</span>
+
+		<span class="n">Vector2</span><span class="p">[]</span> <span class="n">v1s</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector2</span><span class="p">[</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
+		<span class="n">Vector4</span><span class="p">[]</span> <span class="n">v2s</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector4</span><span class="p">[</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">v1s</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">faceInfo</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">faceInfo</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">v1s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">+</span> <span class="m">2</span><span class="p">];</span>
+					<span class="n">v2s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">];</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">faceInfo</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="p">==</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">v1s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">];</span>
+					<span class="n">v2s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">];</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">faceInfo</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="p">==</span> <span class="m">3</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">v1s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">];</span>
+					<span class="n">v2s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">2</span><span class="p">];</span>
+				<span class="p">}</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">faceInfo</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="p">==</span> <span class="m">3</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">v1s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">+</span> <span class="m">2</span><span class="p">];</span>
+					<span class="n">v2s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">];</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">faceInfo</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="p">==</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">v1s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">];</span>
+					<span class="n">v2s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span><span class="p">];</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">faceInfo</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="p">==</span> <span class="m">2</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">v1s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">1</span><span class="p">];</span>
+					<span class="n">v2s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span> <span class="p">-</span> <span class="m">2</span><span class="p">];</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="n">mesh</span><span class="p">.</span><span class="n">uv2</span> <span class="p">=</span> <span class="n">v1s</span><span class="p">;</span>
+		<span class="n">mesh</span><span class="p">.</span><span class="n">tangents</span> <span class="p">=</span> <span class="n">v2s</span><span class="p">;</span>
+
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="social-share">
+  <h4>Share on</h4>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=/fox-ears-water-shader/" class="twitter" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=/fox-ears-water-shader/" class="facebook" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=/fox-ears-water-shader/" class="google-plus" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+  </ul>
+</div><!-- /.social-share -->
+        <p class="byline"><strong>Fox Ears Water Shader</strong> was published on <time datetime="2015-02-17T21:26:15-05:00">February 17, 2015</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="/terrain-generation-in-fox-ears/" title="Terrain Generation in Fox Ears">Terrain Generation in Fox Ears</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2016 Craig Thomas. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/assets/js/scripts.min.js"></script>
+
+	        
+
+</body>
+</html>

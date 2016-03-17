@@ -1,0 +1,486 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Terrain Generation in Fox Ears &#8211; Craig Thomas</title>
+<meta name="description" content="How we generate low-poly terrain for Fox Ears in Unity.">
+<meta name="keywords" content="ggj15, fox, ears, terrain, low poly">
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Terrain Generation in Fox Ears">
+<meta name="twitter:description" content="How we generate low-poly terrain for Fox Ears in Unity.">
+<meta name="twitter:site" content="@CraigRThomas">
+<meta name="twitter:creator" content="@CraigRThomas">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="/images/foxears/terrain-gen/banner.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Terrain Generation in Fox Ears">
+<meta property="og:description" content="How we generate low-poly terrain for Fox Ears in Unity.">
+<meta property="og:url" content="/terrain-generation-in-fox-ears/">
+<meta property="og:site_name" content="Craig Thomas">
+
+
+
+
+
+<link rel="canonical" href="/terrain-generation-in-fox-ears/">
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Craig Thomas Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+	<script src="/assets/js/vendor/html5shiv.min.js"></script>
+	<script src="/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+<script src="/jquery-1.11.2.min.js"></script>
+
+<link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic' rel='stylesheet' type='text/css'>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body class="post">
+
+<!--[if lt IE 9]><div class="browser-upgrade alert alert-info">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div><![endif]-->
+
+<div class="navigation-wrapper">
+	<div class="site-name">
+		<a href="/">Craig Thomas</a>
+	</div><!-- /.site-name -->
+	<div class="top-navigation">
+		<nav role="navigation" id="site-nav" class="nav">
+		    <ul>
+		        
+				    
+				        
+				    
+				    <li><a href="/posts/" >Posts</a></li>
+				
+				    
+				        
+				    
+				    <li><a href="/portfolio/" >Portfolio</a></li>
+				
+		    </ul>
+		</nav>
+	</div><!-- /.top-navigation -->
+</div><!-- /.navigation-wrapper -->
+
+
+  <div class="image-wrap">
+  <img src=
+    
+      "/images/foxears/terrain-gen/banner.png"
+    
+  alt="Terrain Generation in Fox Ears feature image">
+  
+  </div><!-- /.image-wrap -->
+
+
+<div id="main" role="main">
+  <div class="article-author-side">
+    
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+
+	<img src="/images/bio-photo.jpg" class="bio-photo" alt="Craig Thomas bio photo">
+
+
+  <h3 itemprop="name">Craig Thomas</h3>
+  <p>I corral computers to show cool colours using code.</p>
+  <a href="mailto:craig.thomas36@gmail.com" class="author-social" target="_blank"><i class="fa fa-fw fa-envelope-square"></i>Email</a>
+  <a href="http://twitter.com/CraigRThomas" class="author-social" target="_blank"><i class="fa fa-fw fa-twitter-square"></i> Twitter</a>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      
+        <h1><a href="/terrain-generation-in-fox-ears/" rel="bookmark" title="Terrain Generation in Fox Ears">Terrain Generation in Fox Ears</a></h1>
+      
+    </div><!--/ .headline-wrap -->
+    <div class="article-wrap">
+      <p>Fox Ears was made as part of the 2015 Global Game Jam. You can see a video of the game in action <a href="https://www.youtube.com/watch?v=97rNvLYpQCQ">here</a>, and you can download it on our <a href="http://angrysquidgames.itch.io/fox-ears">itch.io page</a>.</p>
+
+<p>Moving forward with Fox Ears, we knew we wanted more robust terrain than the static models made for the game jam. The three most obvious options were to continue to use hand made models, to use Unity’s built in terrain tools/modify Unity’s plane, or to generate our own meshes and use those.</p>
+
+<p>While the hand made models worked really well for the jam, they left a lot to be desired. It really restricted tile design and sometimes led to seams between segments, and meant that we didn’t have a whole lot of control over the layout of terrain. A generated option seemed much more desirable.</p>
+
+<p>Using Unity’s existing terrain or their in-engine meshes would obviously be the next best thing, but this proved not to be an ideal option either. Unity’s terrain and meshes both auto-generate smoothed normals, which doesn’t really work with the low-poly look we were going for. So, our final option was to generate our own meshes.</p>
+
+<h3 id="mesh-generation-in-unity">Mesh Generation In Unity</h3>
+<p>Unity actually makes mesh generation very easy. First let’s take a look at the basic skeleton for our base class, LowPolyTerrain:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="na">[RequireComponent(typeof(MeshFilter))]</span>
+<span class="na">[RequireComponent(typeof(MeshRenderer))]</span>
+<span class="na">[System.Serializable]</span>
+<span class="k">public</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">LowPolyTerrain</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+	<span class="k">public</span> <span class="kt">float</span> <span class="n">widthInUnits</span><span class="p">;</span>
+	<span class="k">public</span> <span class="kt">float</span> <span class="n">lengthInUnits</span><span class="p">;</span>
+	<span class="k">public</span> <span class="kt">float</span> <span class="n">height</span><span class="p">;</span>
+	<span class="k">public</span> <span class="kt">int</span> <span class="n">widthInVerts</span><span class="p">;</span>
+	<span class="k">public</span> <span class="kt">int</span> <span class="n">lengthInVerts</span><span class="p">;</span>
+	<span class="k">public</span> <span class="n">Vector3</span> <span class="n">minOffset</span><span class="p">;</span>
+	<span class="k">public</span> <span class="n">Vector3</span> <span class="n">maxOffset</span><span class="p">;</span>
+
+	<span class="k">public</span> <span class="kt">uint</span> <span class="n">uniqueID</span><span class="p">;</span>
+	<span class="kt">bool</span> <span class="n">uniqueIDSet</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+
+<span class="na">	[HideInInspector]</span>
+	<span class="k">public</span> <span class="n">Mesh</span> <span class="n">mesh</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+
+	<span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">GenerateMesh</span><span class="p">()</span> <span class="p">{}</span>
+
+	<span class="k">protected</span> <span class="k">void</span> <span class="nf">GenerateUniqueID</span><span class="p">()</span> <span class="p">{}</span>
+
+	<span class="k">protected</span> <span class="k">virtual</span> <span class="n">Vector3</span><span class="p">[]</span> <span class="nf">GenerateVertices</span><span class="p">()</span> <span class="p">{}</span>
+
+	<span class="k">protected</span> <span class="k">virtual</span> <span class="n">Vector3</span><span class="p">[]</span> <span class="nf">GenerateNormals</span><span class="p">()</span> <span class="p">{}</span>
+
+	<span class="k">protected</span> <span class="k">virtual</span> <span class="n">Vector2</span><span class="p">[]</span> <span class="nf">GenerateUVs</span><span class="p">()</span> <span class="p">{}</span>
+
+	<span class="k">protected</span> <span class="k">virtual</span> <span class="kt">int</span><span class="p">[]</span> <span class="nf">GenerateTriangles</span><span class="p">()</span> <span class="p">{}</span>
+
+	<span class="k">protected</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">GenerateOffsets</span><span class="p">(</span><span class="kt">bool</span> <span class="n">resetVertices</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">}</span></code></pre></div>
+
+<p class="notice"><strong>widthInUnits &amp; lengthInUnits</strong> are the dimensions in world units of the terrain (along the x and z axis respectively). <br />
+<strong>height</strong> is the world y value the terrain gets generated at.<br />
+<strong>widthInVerts &amp; lengthInVerts</strong> are the dimensions in vertices of the terrain. This lets us control the vertex density of the mesh and have more/less detail available. <br />
+<strong>minOffset &amp; maxOffset</strong> define the bounds of the vertex offset function. We offset the vertices a little so the terrain deviates from a straight plane and has a more traditional low-poly look, as well as just being more interesting.<br />
+<strong>uniqueID</strong> is used to identify the Mesh asset we create.<br />
+<strong>mesh</strong> is the actual Mesh asset.<br /></p>
+
+<p>Now let’s look at the basic <strong>GenerateMesh</strong> function:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">GenerateMesh</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">GenerateUniqueID</span><span class="p">();</span>
+
+	<span class="n">mesh</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Mesh</span><span class="p">();</span>
+	<span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">MeshFilter</span><span class="p">&gt;().</span><span class="n">mesh</span> <span class="p">=</span> <span class="n">mesh</span><span class="p">;</span>
+
+	<span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span> <span class="p">=</span> <span class="n">GenerateVertices</span><span class="p">();</span>
+	<span class="n">mesh</span><span class="p">.</span><span class="n">uv</span> <span class="p">=</span> <span class="n">GenerateUVs</span><span class="p">();</span>
+	<span class="n">mesh</span><span class="p">.</span><span class="n">triangles</span> <span class="p">=</span> <span class="n">GenerateTriangles</span><span class="p">();</span>
+	<span class="n">GenerateOffsets</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
+	<span class="n">mesh</span><span class="p">.</span><span class="n">normals</span> <span class="p">=</span> <span class="n">GenerateNormals</span><span class="p">();</span>
+<span class="p">}</span></code></pre></div>
+
+<p>We create a new Mesh object and set it as the active Mesh for the object’s MeshFilter, then fill it with the data we need. <strong>GenerateVertices, GenerateUVs, GenerateTriangles, GenerateOffsets, &amp; GenerateNormals</strong> all generate the data for the Mesh, we’ll cover them in more detail below. There are some dependencies in the order this data is calculated: the UVs, offsets, and normals all require that the vertices have already been calculated; the offsets also require that the UVs have already been calculated; and the normals should be calculated after the offsets so the offsets are taken into account for lighting. The triangles could be calculated at any point.</p>
+
+<p>Before we dive into the code, here’s an image of a plane generated with these terrain tools, labelled with some of the variables used to help illustrate what they represent.</p>
+
+<figure>
+	<a href="../images/foxears/terrain-gen/plane-verts.png"><img src="../images/foxears/terrain-gen/plane-verts.png" /></a>
+</figure>
+
+<h3 id="generating-the-vertices">Generating The Vertices</h3>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">protected</span> <span class="k">virtual</span> <span class="n">Vector3</span><span class="p">[]</span> <span class="nf">GenerateVertices</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">Vector3</span><span class="p">[]</span> <span class="n">vertices</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">[(</span><span class="n">widthInVerts</span><span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="p">(</span><span class="n">lengthInVerts</span><span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="m">3</span> <span class="p">*</span> <span class="m">2</span><span class="p">];</span>
+
+	<span class="kt">float</span> <span class="n">widthPerVertex</span> <span class="p">=</span> <span class="n">widthInUnits</span> <span class="p">/</span> <span class="p">(</span><span class="kt">float</span><span class="p">)(</span><span class="n">widthInVerts</span> <span class="p">-</span> <span class="m">1</span><span class="p">);</span>
+	<span class="kt">float</span> <span class="n">lengthPerVertex</span> <span class="p">=</span> <span class="n">lengthInUnits</span> <span class="p">/</span> <span class="p">(</span><span class="kt">float</span><span class="p">)(</span><span class="n">lengthInVerts</span> <span class="p">-</span> <span class="m">1</span><span class="p">);</span>
+	<span class="kt">float</span> <span class="n">halfWidth</span> <span class="p">=</span> <span class="n">widthInUnits</span> <span class="p">/</span> <span class="m">2.0f</span><span class="p">;</span>
+	<span class="kt">float</span> <span class="n">halfLength</span> <span class="p">=</span> <span class="n">lengthInUnits</span> <span class="p">/</span> <span class="m">2.0f</span><span class="p">;</span>
+
+	<span class="kt">int</span> <span class="n">faceIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">x</span> <span class="p">&lt;</span> <span class="n">widthInVerts</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">x</span><span class="p">++)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">z</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">z</span> <span class="p">&lt;</span> <span class="n">lengthInVerts</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">z</span><span class="p">++)</span> <span class="p">{</span>
+			<span class="n">vertices</span><span class="p">[</span><span class="n">faceIndex</span> <span class="p">*</span> <span class="m">3</span><span class="p">]</span>		  <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">((</span><span class="n">x</span> <span class="p">*</span> <span class="n">widthPerVertex</span><span class="p">)</span> <span class="p">-</span> <span class="n">halfWidth</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="p">(</span><span class="n">z</span> <span class="p">*</span> <span class="n">lengthPerVertex</span><span class="p">)</span> <span class="p">-</span> <span class="n">halfLength</span><span class="p">);</span>
+			<span class="n">vertices</span><span class="p">[</span><span class="n">faceIndex</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="m">1</span><span class="p">]</span>   <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">((</span><span class="n">x</span> <span class="p">*</span> <span class="n">widthPerVertex</span><span class="p">)</span> <span class="p">-</span> <span class="n">halfWidth</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="p">((</span><span class="n">z</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="n">lengthPerVertex</span><span class="p">)</span> <span class="p">-</span> <span class="n">halfLength</span><span class="p">);</span>
+			<span class="n">vertices</span><span class="p">[</span><span class="n">faceIndex</span><span class="p">++</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="m">2</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(((</span><span class="n">x</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="n">widthPerVertex</span><span class="p">)</span> <span class="p">-</span> <span class="n">halfWidth</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="p">(</span><span class="n">z</span> <span class="p">*</span> <span class="n">lengthPerVertex</span><span class="p">)</span> <span class="p">-</span> <span class="n">halfLength</span><span class="p">);</span>
+
+			<span class="n">vertices</span><span class="p">[</span><span class="n">faceIndex</span> <span class="p">*</span> <span class="m">3</span><span class="p">]</span>		  <span class="p">=</span> <span class="n">vertices</span><span class="p">[(</span><span class="n">faceIndex</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="m">2</span><span class="p">];</span>
+			<span class="n">vertices</span><span class="p">[</span><span class="n">faceIndex</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="m">1</span><span class="p">]</span>	  <span class="p">=</span> <span class="n">vertices</span><span class="p">[(</span><span class="n">faceIndex</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="m">1</span><span class="p">];</span>
+			<span class="n">vertices</span><span class="p">[</span><span class="n">faceIndex</span><span class="p">++</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="m">2</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(((</span><span class="n">x</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="n">widthPerVertex</span><span class="p">)</span> <span class="p">-</span> <span class="n">halfWidth</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="p">((</span><span class="n">z</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="n">lengthPerVertex</span><span class="p">)</span> <span class="p">-</span> <span class="n">halfLength</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">vertices</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>The first thing we need to do is figure out how many vertices we’ll have. Because we want hard edges, and Unity uses per-vertex normals, we can’t have faces sharing vertices, so we have to duplicate the vertex data for each face. The number of quads in the plane can be found by multiplying <strong>widthInVerts-1</strong> by <strong>lengthInVerts-1</strong>. We then multiply by <strong>2</strong> to get the number of triangles, and multiply that by <strong>3</strong> to get the number of vertices we’ll have. We use this number to allocate the array of vertices that will get passed to our Mesh.</p>
+
+<p>Next we calculate some values:</p>
+
+<p class="notice"><strong>widthPerVertex &amp; lengthPerVertex</strong> is the distance along the x-axis and z-axis (respectively) between each vertex.<br />
+<strong>halfWidth &amp; halfLength</strong> are used to offset the vertices by half the plane’s size so the Mesh is built centered on the GameObject’s origin.</p>
+
+<p>Finally, we fill the array with the data for each vertex. We do this per quad, setting 6 vertex values at once. Since we use a 2D iteration, <strong>faceIndex</strong> is used as the index into the 1D vertex array.</p>
+
+<p>In the image above, you can see our basic contruction plan on the highlighted quad around the middle. We build each quad by constructing two triangles; first the red (using verts A-C-B), then the orange (using verts B-C-D) (these orders are used because we’re using clockwise winding; they would have to be adjusted for a counter-clockwise rendering setup).  We store the vertices for each tri consecutively in the vertex array. </p>
+
+<p>For the first triangle of each quad, we calculate all of the values for each vertex. Our iterators (<strong>x &amp; z</strong>) represent the values of the vertex at point <strong>A</strong> for each quad, which means point <strong>B = A + (1,0)</strong>, <strong>C = A + (0,1)</strong>, and <strong>D = A + (1,1)</strong>. </p>
+
+<p>For the second triangle, we can re-use the values we calculated for points <strong>B</strong> and <strong>C</strong>, then we have to calculate point <strong>D</strong>. Once that’s done for each quad, we have our array of vertices completed!</p>
+
+<h3 id="generating-the-uvs">Generating The UVs</h3>
+<p>UV generation is very straightforward; the UV for each vertex is simply the percentage of the way it is along each axis. The only sort of tricky part is we have to account for the offset we used to center the mesh around the origin:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">protected</span> <span class="k">virtual</span> <span class="n">Vector2</span><span class="p">[]</span> <span class="nf">GenerateUVs</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">Vector2</span><span class="p">[]</span> <span class="n">uvs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector2</span><span class="p">[</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
+	<span class="kt">float</span> <span class="n">halfWidth</span> <span class="p">=</span> <span class="n">widthInUnits</span> <span class="p">/</span> <span class="m">2.0f</span><span class="p">;</span>
+	<span class="kt">float</span> <span class="n">halfLength</span> <span class="p">=</span> <span class="n">lengthInUnits</span> <span class="p">/</span> <span class="m">2.0f</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">uvs</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+		<span class="n">uvs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector2</span><span class="p">((</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="p">+</span> <span class="n">halfWidth</span><span class="p">)</span> <span class="p">/</span> <span class="n">widthInUnits</span><span class="p">,</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">z</span> <span class="p">+</span> <span class="n">halfLength</span><span class="p">)</span> <span class="p">/</span> <span class="n">lengthInUnits</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">uvs</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>We simply iterate through each vertex, add half the width and length of the plane to its <strong>x</strong> and <strong>z</strong> values, and divide those by the total width and length to figure out its UV values.</p>
+
+<h3 id="generating-the-triangles">Generating The Triangles</h3>
+<p>Once again, this is a very straightforward step. The triangle array is a set of integers that serve as indices into the vertex array. Because of the way we set up our arrays of information, our triangle array is a simple linearly increasing function:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">protected</span> <span class="k">virtual</span> <span class="kt">int</span><span class="p">[]</span> <span class="nf">GenerateTriangles</span><span class="p">()</span> <span class="p">{</span>
+	<span class="kt">int</span><span class="p">[]</span> <span class="n">triangles</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">triangles</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+		<span class="n">triangles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">triangles</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="generating-the-offsets-creating-noise">Generating The Offsets (Creating Noise)</h3>
+<p>So far, the plane we’ve generated is completely flat, and kind of boring. There is visually no difference between our plane and the default Unity plane, in fact. Adding a little noise will make the hard edges show, and really accentuate the low poly look. Let’s look at the code:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">protected</span> <span class="k">virtual</span> <span class="k">void</span> <span class="nf">GenerateOffsets</span><span class="p">(</span><span class="kt">bool</span> <span class="n">resetVertices</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">Vector3</span><span class="p">[,]</span> <span class="n">offsets</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">[</span><span class="n">widthInVerts</span><span class="p">,</span> <span class="n">lengthInVerts</span><span class="p">];</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">x</span> <span class="p">&lt;</span> <span class="n">widthInVerts</span><span class="p">;</span> <span class="n">x</span><span class="p">++)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">z</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">z</span> <span class="p">&lt;</span> <span class="n">lengthInVerts</span><span class="p">;</span> <span class="n">z</span><span class="p">++)</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">z</span> <span class="p">==</span> <span class="m">0</span> <span class="p">||</span> <span class="n">z</span> <span class="p">==</span> <span class="p">(</span><span class="n">lengthInVerts</span> <span class="p">-</span> <span class="m">1</span><span class="p">)){</span>
+				<span class="n">offsets</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">]</span> <span class="p">=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">zero</span><span class="p">;</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">offsets</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">]</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">(</span><span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="n">minOffset</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">maxOffset</span><span class="p">.</span><span class="n">x</span><span class="p">),</span>
+												<span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="n">minOffset</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">maxOffset</span><span class="p">.</span><span class="n">y</span><span class="p">),</span>
+												<span class="n">Random</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="n">minOffset</span><span class="p">.</span><span class="n">z</span><span class="p">,</span> <span class="n">maxOffset</span><span class="p">.</span><span class="n">z</span><span class="p">));</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="n">Vector3</span><span class="p">[]</span> <span class="n">newVertices</span> <span class="p">=</span> <span class="p">(</span><span class="n">resetVertices</span><span class="p">)</span> <span class="p">?</span> <span class="n">GenerateVertices</span><span class="p">()</span> <span class="p">:</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">newVertices</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+		<span class="kt">int</span> <span class="n">xIndex</span> <span class="p">=</span> <span class="n">Mathf</span><span class="p">.</span><span class="n">RoundToInt</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="p">*</span> <span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">widthInVerts</span> <span class="p">-</span> <span class="m">1.0f</span><span class="p">));</span>
+		<span class="kt">int</span> <span class="n">yIndex</span> <span class="p">=</span> <span class="n">Mathf</span><span class="p">.</span><span class="n">RoundToInt</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">uv</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="p">*</span> <span class="p">((</span><span class="kt">float</span><span class="p">)</span><span class="n">lengthInVerts</span> <span class="p">-</span> <span class="m">1.0f</span><span class="p">));</span>
+		<span class="n">newVertices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">+=</span> <span class="n">offsets</span><span class="p">[</span><span class="n">xIndex</span><span class="p">,</span> <span class="n">yIndex</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span> <span class="p">=</span> <span class="n">newVertices</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>The first thing we do here is generate a random offset per vertex. We do this so every face that shares the same vertex gets the same offset for that vertex, otherwise we’d have seams all over our geometry. This basic plane generates completely random offsets (within the defined range), but this could obviously be reworked to create more interesting patterns. </p>
+
+<p>We also force the offset to be zero if the <strong>z</strong> value is <strong>0</strong> or <strong>lengthInVerts-1</strong>, so our planes will have flat edges and will fit together seamlessly. This could be adapted to work along the x-axis, or at heights other than 0.</p>
+
+<p>Once we’ve generated these offsets, we iterate through each vertex and apply the offset. The <strong>resetVertices</strong> flag is there so we can hook this function up to our editor script, and regenerate the offsets without regenerating the whole mesh, or so we can apply multiple iterations of the offset function. We use each vertex’s UV values to figure out the indices to the offset array, since the UV values will be the same no matter which face the vertex belongs to.</p>
+
+<h3 id="generating-the-normals">Generating The Normals</h3>
+<p>Finally, we have to generate the normals for the mesh. We do this last so we take into account the newly offset positions of the vertices during normal calculation. The code for this can be seen below:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">protected</span> <span class="k">virtual</span> <span class="n">Vector3</span><span class="p">[]</span> <span class="nf">GenerateNormals</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">Vector3</span><span class="p">[]</span> <span class="n">normals</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">[</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
+	<span class="n">Vector3</span> <span class="n">tri1</span><span class="p">,</span> <span class="n">tri2</span><span class="p">,</span> <span class="n">normal</span><span class="p">;</span>
+
+	<span class="kt">int</span> <span class="n">triCount</span> <span class="p">=</span> <span class="p">(</span><span class="n">widthInVerts</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="p">(</span><span class="n">lengthInVerts</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="p">*</span> <span class="m">2</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">triCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++</span> <span class="p">)</span> <span class="p">{</span>
+		<span class="n">tri1</span> <span class="p">=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="m">1</span><span class="p">]</span> <span class="p">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span> <span class="p">*</span> <span class="m">3</span><span class="p">]);</span>
+		<span class="n">tri2</span> <span class="p">=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="m">2</span><span class="p">]</span> <span class="p">-</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span> <span class="p">*</span> <span class="m">3</span><span class="p">]);</span>
+		<span class="n">normal</span> <span class="p">=</span> <span class="n">Vector3</span><span class="p">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">Vector3</span><span class="p">.</span><span class="n">Cross</span><span class="p">(</span><span class="n">tri1</span><span class="p">,</span> <span class="n">tri2</span><span class="p">));</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">v</span> <span class="p">&lt;</span> <span class="m">3</span><span class="p">;</span> <span class="n">v</span><span class="p">++)</span> <span class="p">{</span>
+			<span class="n">normals</span><span class="p">[</span><span class="n">i</span> <span class="p">*</span> <span class="m">3</span> <span class="p">+</span> <span class="n">v</span><span class="p">]</span> <span class="p">=</span> <span class="n">normal</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">normals</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>We calculate the normals per triangle to preserve our hard edges, and store them per vertex. To calculate the normal for each triangle, we compute the cross product C-A x B-A and for the other tri, C-B x D-B. Following the right-hand-rule, it should be that our vectors are the other way around, however for some reason this gives incorrect results in Unity.</p>
+
+<p>Once we have the normal for the triangle, we store it for each vertex, and continue on to the next one.</p>
+
+<h3 id="putting-it-all-together">Putting It All Together</h3>
+<p>Now that our base class is done, let’s take a look at a very simple derived class that is looking to create a basic plane:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">class</span> <span class="nc">LowPolyPlane</span> <span class="p">:</span> <span class="n">LowPolyTerrain</span> <span class="p">{</span>
+	
+	<span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">GenerateMesh</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">base</span><span class="p">.</span><span class="n">GenerateMesh</span><span class="p">();</span>
+
+		<span class="n">mesh</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="s">&quot;Low Poly Plane Mesh&quot;</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="k">void</span> <span class="nf">Start</span><span class="p">()</span> <span class="p">{</span>
+		
+	<span class="p">}</span>
+
+	<span class="k">void</span> <span class="nf">Update</span><span class="p">()</span> <span class="p">{</span>
+
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<p>…and that’s it! If we wanted to generate the mesh each time the game is run, we would just call <strong>GenerateMesh</strong> from <strong>Start</strong> or <strong>OnEnable</strong> and be done. However, we wanted more control over the shape of our tiles, and wanted to store interesting terrains we generated. To do this, we use the Editor script below:</p>
+
+<div class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="na">[CustomEditor(typeof(LowPolyPlane))]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">LowPolyPlaneEditor</span> <span class="p">:</span> <span class="n">Editor</span> <span class="p">{</span>
+
+	<span class="n">Material</span> <span class="n">mat</span><span class="p">,</span> <span class="n">newMat</span><span class="p">;</span>
+
+	<span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">OnInspectorGUI</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">LowPolyPlane</span> <span class="n">plane</span> <span class="p">=</span> <span class="n">target</span> <span class="k">as</span> <span class="n">LowPolyPlane</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">mat</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">mat</span> <span class="p">=</span> <span class="n">plane</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">Renderer</span><span class="p">&gt;().</span><span class="n">sharedMaterial</span><span class="p">;</span>
+			<span class="n">newMat</span> <span class="p">=</span> <span class="n">mat</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="n">GUILayout</span><span class="p">.</span><span class="n">Label</span><span class="p">(</span><span class="s">&quot;Plane Settings&quot;</span><span class="p">,</span> <span class="n">EditorStyles</span><span class="p">.</span><span class="n">boldLabel</span><span class="p">);</span>
+
+		<span class="n">plane</span><span class="p">.</span><span class="n">widthInUnits</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">FloatField</span><span class="p">(</span><span class="s">&quot;Width (units):&quot;</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">widthInUnits</span><span class="p">);</span>
+		<span class="n">plane</span><span class="p">.</span><span class="n">lengthInUnits</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">FloatField</span><span class="p">(</span><span class="s">&quot;Length (units):&quot;</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">lengthInUnits</span><span class="p">);</span>
+		<span class="n">plane</span><span class="p">.</span><span class="n">height</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">FloatField</span><span class="p">(</span><span class="s">&quot;Height (units):&quot;</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+		<span class="n">plane</span><span class="p">.</span><span class="n">widthInVerts</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">IntField</span><span class="p">(</span><span class="s">&quot;Width (verts):&quot;</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">widthInVerts</span><span class="p">);</span>
+		<span class="n">plane</span><span class="p">.</span><span class="n">lengthInVerts</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">IntField</span><span class="p">(</span><span class="s">&quot;Length (verts):&quot;</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">lengthInVerts</span><span class="p">);</span>
+		<span class="n">newMat</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">ObjectField</span><span class="p">(</span><span class="s">&quot;Material:&quot;</span><span class="p">,</span> <span class="n">newMat</span><span class="p">,</span> <span class="k">typeof</span><span class="p">(</span><span class="n">Material</span><span class="p">),</span> <span class="k">false</span><span class="p">)</span> <span class="k">as</span> <span class="n">Material</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">newMat</span> <span class="p">!=</span> <span class="n">mat</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">plane</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">Renderer</span><span class="p">&gt;().</span><span class="n">material</span> <span class="p">=</span> <span class="n">newMat</span><span class="p">;</span>
+			<span class="n">mat</span> <span class="p">=</span> <span class="n">newMat</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="n">plane</span><span class="p">.</span><span class="n">minOffset</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">Vector3Field</span><span class="p">(</span><span class="s">&quot;Minimum Random Offset:&quot;</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">minOffset</span><span class="p">);</span>
+		<span class="n">plane</span><span class="p">.</span><span class="n">maxOffset</span> <span class="p">=</span> <span class="n">EditorGUILayout</span><span class="p">.</span><span class="n">Vector3Field</span><span class="p">(</span><span class="s">&quot;Maximum Random Offset:&quot;</span><span class="p">,</span> <span class="n">plane</span><span class="p">.</span><span class="n">maxOffset</span><span class="p">);</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="n">widthInUnits</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span> <span class="n">plane</span><span class="p">.</span><span class="n">widthInUnits</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="n">lengthInUnits</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span> <span class="n">plane</span><span class="p">.</span><span class="n">lengthInUnits</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="n">widthInVerts</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span> <span class="n">plane</span><span class="p">.</span><span class="n">widthInVerts</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="n">lengthInVerts</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span> <span class="n">plane</span><span class="p">.</span><span class="n">lengthInVerts</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+
+		<span class="k">if</span> <span class="p">(</span><span class="n">GUILayout</span><span class="p">.</span><span class="n">Button</span><span class="p">(</span><span class="s">&quot;Create Plane&quot;</span><span class="p">))</span> <span class="p">{</span>
+			<span class="n">plane</span><span class="p">.</span><span class="n">GenerateMesh</span><span class="p">();</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">MeshCollider</span><span class="p">&gt;()</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+				<span class="n">Object</span><span class="p">.</span><span class="n">DestroyImmediate</span><span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">MeshCollider</span><span class="p">&gt;());</span>
+			<span class="p">}</span>
+			<span class="n">plane</span><span class="p">.</span><span class="n">gameObject</span><span class="p">.</span><span class="n">AddComponent</span><span class="p">&lt;</span><span class="n">MeshCollider</span><span class="p">&gt;();</span>
+
+			<span class="n">AssetDatabase</span><span class="p">.</span><span class="n">CreateAsset</span><span class="p">(</span><span class="n">plane</span><span class="p">.</span><span class="n">mesh</span><span class="p">,</span> <span class="s">&quot;Assets/_FoxEars/Models/Tile Components/Generated Terrain/&quot;</span> <span class="p">+</span> <span class="n">plane</span><span class="p">.</span><span class="n">uniqueID</span> <span class="p">+</span> <span class="s">&quot;.mesh&quot;</span><span class="p">);</span>
+			<span class="n">AssetDatabase</span><span class="p">.</span><span class="n">SaveAssets</span><span class="p">();</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">public</span> <span class="k">void</span> <span class="nf">OnDisable</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">mat</span> <span class="p">=</span> <span class="n">newMat</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+	<span class="p">}</span>
+
+
+<span class="p">}</span></code></pre></div>
+
+<p>First, we get the target object and cast it as our LowPolyPlane, and we initialize our temporary materials to whatever the current object has set. Next, we collect the various information for the settings for the plane, and apply a little data validation to it so the results are sane/don’t cause errors. Finally, we add a button that generates the mesh, and updates the Asset Database so Unity will recognize it. Note that the directory specified in the call to <strong>AssetDatabase.CreateAsset</strong> needs to exist beforehand, or it will throw an error. Also, if we fail to set <strong>mat</strong> and <strong>newMat</strong> to null in <strong>OnDisable</strong>, our object will leak materials into the scene.</p>
+
+<p>Now when we select a LowPolyPlane in our scene, its inspector will show a “Create Plane” button which we can click to generate a new mesh with the most recent settings we’ve set.</p>
+
+<p>In an upcoming blog post, we’ll cover some of the more interesting terrain types we’ve created, to show what can be built on this base. If you have any questions/comments/cool things you’ve made with this, hit me up on Twitter <a href="http://www.twitter.com/craigrthomas">@CraigRThomas</a>.</p>
+
+<p><strong>Update (17/02/2015):</strong> The next blog post can be found <a href="../generating-different-terrain-types/">here</a>.</p>
+
+      <hr />
+      <footer role="contentinfo">
+        <div class="social-share">
+  <h4>Share on</h4>
+  <ul>
+    <li>
+      <a href="https://twitter.com/intent/tweet?text=/terrain-generation-in-fox-ears/" class="twitter" title="Share on Twitter"><i class="fa fa-twitter"></i><span> Twitter</span></a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=/terrain-generation-in-fox-ears/" class="facebook" title="Share on Facebook"><i class="fa fa-facebook"></i><span> Facebook</span></a>
+    </li>
+    <li>
+      <a href="https://plus.google.com/share?url=/terrain-generation-in-fox-ears/" class="google-plus" title="Share on Google Plus"><i class="fa fa-google-plus"></i><span> Google+</span></a>
+    </li>
+  </ul>
+</div><!-- /.social-share -->
+        <p class="byline"><strong>Terrain Generation in Fox Ears</strong> was published on <time datetime="2015-02-09T21:08:27-05:00">February 09, 2015</time>.</p>
+      </footer>
+    </div><!-- /.article-wrap -->
+  
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>You might also enjoy <small class="pull-right">(<a href="/posts/">View all posts</a>)</small></h4>
+    <ul>
+    
+      <li><a href="/fox-ears-water-shader/" title="Fox Ears Water Shader">Fox Ears Water Shader</a></li>
+    
+    </ul>
+    <hr />
+  </div><!-- /.related-articles -->
+  <footer>
+    
+
+<span>&copy; 2016 Craig Thomas. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="http://mademistakes.com/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a> theme.</span>
+
+  </footer>
+</div><!-- /.footer-wrap -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="/assets/js/scripts.min.js"></script>
+
+	        
+
+</body>
+</html>
